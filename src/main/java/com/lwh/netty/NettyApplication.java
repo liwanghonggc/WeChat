@@ -7,7 +7,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.lwh.netty.mapper")
-@ComponentScan(basePackages = {"com.lwh.netty"})
+@ComponentScan(basePackages = {"com.lwh.netty", "org.n3r.idworker"})
 
 /**
  * 扫描MyBatis的mapper路径
