@@ -24,7 +24,7 @@ public class FastDFSClient {
 
 	/**
 	 * 上传文件
-	 * 
+	 *
 	 * @param file
 	 *            文件对象
 	 * @return 文件访问地址
@@ -33,41 +33,41 @@ public class FastDFSClient {
 	public String uploadFile(MultipartFile file) throws IOException {
 		StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(),
 				FilenameUtils.getExtension(file.getOriginalFilename()), null);
-		
+
 		return storePath.getPath();
 	}
-	
+
 	public String uploadFile2(MultipartFile file) throws IOException {
 		StorePath storePath = storageClient.uploadImageAndCrtThumbImage(file.getInputStream(), file.getSize(),
 				FilenameUtils.getExtension(file.getOriginalFilename()), null);
 
 		return storePath.getPath();
 	}
-	
+
 	public String uploadQRCode(MultipartFile file) throws IOException {
 		StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(),
 				"png", null);
-		
+
 		return storePath.getPath();
 	}
-	
+
 	public String uploadFace(MultipartFile file) throws IOException {
 		StorePath storePath = storageClient.uploadImageAndCrtThumbImage(file.getInputStream(), file.getSize(),
 				"png", null);
-		
+
 		return storePath.getPath();
 	}
-	
+
 	public String uploadBase64(MultipartFile file) throws IOException {
 		StorePath storePath = storageClient.uploadImageAndCrtThumbImage(file.getInputStream(), file.getSize(),
 				"png", null);
-		
+
 		return storePath.getPath();
 	}
-	
+
 	/**
 	 * 将一段字符串生成一个文件上传
-	 * 
+	 *
 	 * @param content
 	 *            文件内容
 	 * @param fileExtension
@@ -84,7 +84,7 @@ public class FastDFSClient {
 
 	/**
 	 * 删除文件
-	 * 
+	 *
 	 * @param fileUrl
 	 *            文件访问地址
 	 * @return
