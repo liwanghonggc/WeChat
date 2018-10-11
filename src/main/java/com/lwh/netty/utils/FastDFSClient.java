@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,6 @@ public class FastDFSClient {
 	@Autowired
 	private FastFileStorageClient storageClient;
 
-//	@Autowired
-//	private AppConfig appConfig; // 项目参数配置
 
 	/**
 	 * 上传文件
@@ -79,12 +80,7 @@ public class FastDFSClient {
 		return storePath.getPath();
 	}
 
-	// 封装图片完整URL地址
-//	private String getResAccessUrl(StorePath storePath) {
-//		String fileUrl = AppConstants.HTTP_PRODOCOL + appConfig.getResHost() + ":" + appConfig.getFdfsStoragePort()
-//				+ "/" + storePath.getFullPath();
-//		return fileUrl;
-//	}
+
 
 	/**
 	 * 删除文件
