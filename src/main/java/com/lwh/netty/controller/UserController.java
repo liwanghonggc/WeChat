@@ -1,14 +1,18 @@
 package com.lwh.netty.controller;
 
 import com.lwh.netty.pojo.Users;
+import com.lwh.netty.pojo.bo.UserBO;
 import com.lwh.netty.pojo.vo.UserVO;
 import com.lwh.netty.service.UserService;
+import com.lwh.netty.utils.FastDFSClient;
+import com.lwh.netty.utils.FileUtils;
 import com.lwh.netty.utils.MD5Utils;
 import com.lwh.netty.utils.WeChatResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lwh
@@ -22,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FastDFSClient fastDFSClient;
 
     @PostMapping("/registOrLogin")
     public WeChatResult registOrLogin(@RequestBody Users user) throws Exception{
@@ -60,5 +67,29 @@ public class UserController {
         BeanUtils.copyProperties(userResult, userVO);
 
         return WeChatResult.ok(userVO);
+    }
+
+    /**
+     * 获取前端传过来的base64字符串,然后转换为文件对象再上传
+     * @param userBO
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/uploadFaceBase64")
+    public WeChatResult uploadFaceBase64(@RequestBody UserBO userBO) throws Exception {
+
+        //获取前端传过来的base64字符串,然后转换为文件对象再上传
+        String faceData = userBO.getFaceData();
+
+        String userFacePath = "C:\\" + userBO.getUserId() + "userface64.png";
+        FileUtils.base64ToFile(userFacePath, faceData);
+
+        //上传文件到FastDFS
+        MultipartFile faceFile = FileUtils.fileToMultipart(userFacePath);
+        String imageUrl = fastDFSClient.uploadBase64(faceFile);
+
+        System.out.println(imageUrl);
+
+        return WeChatResult.ok();
     }
 }
