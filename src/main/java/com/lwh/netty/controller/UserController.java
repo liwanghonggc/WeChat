@@ -70,7 +70,7 @@ public class UserController {
     }
 
     /**
-     * 获取前端传过来的base64字符串,然后转换为文件对象再上传
+     * 图片上传,获取前端传过来的base64字符串,然后转换为文件对象再上传
      * @param userBO
      * @return
      * @throws Exception
@@ -81,15 +81,30 @@ public class UserController {
         //获取前端传过来的base64字符串,然后转换为文件对象再上传
         String faceData = userBO.getFaceData();
 
-        String userFacePath = "C:\\" + userBO.getUserId() + "userPic.png";
+        String userFacePath = "D:\\" + userBO.getUserId() + "userPic.png";
         FileUtils.base64ToFile(userFacePath, faceData);
 
         //上传文件到FastDFS
         MultipartFile faceFile = FileUtils.fileToMultipart(userFacePath);
+
+        //这时候文件服务器里存了两份图片,一个是大图,一个是小图
         String imageUrl = fastDFSClient.uploadBase64(faceFile);
 
         System.out.println(imageUrl);
 
-        return WeChatResult.ok();
+        //针对url切割,获取缩略图的URL
+        String thump = "_80x80";
+        String[] arr = imageUrl.split("\\.");
+        String thumpImgUrl = arr[0] + thump + arr[1];
+
+        Users user = new Users();
+        user.setId(userBO.getUserId());
+        user.setFaceImage(thumpImgUrl);
+        user.setFaceImageBig(imageUrl);
+
+        user = userService.updateUserInfo(user);
+
+        //返回前端,前端进行刷新
+        return WeChatResult.ok(user);
     }
 }

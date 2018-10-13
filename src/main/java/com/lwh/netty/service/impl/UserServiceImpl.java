@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Sid sid;
 
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
     public boolean queryUserNameIsExist(String userName) {
 
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         return result != null;
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
     public Users queryUserForLogin(String userName, String password) {
 
@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public Users saveUser(Users user) {
         //生成唯一ID
@@ -64,5 +65,18 @@ public class UserServiceImpl implements UserService {
 
         usersMapper.insert(user);
         return user;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public Users updateUserInfo(Users user) {
+        //Selective方法对于为空的字段不会更新,通常用这个
+        usersMapper.updateByPrimaryKeySelective(user);
+        return queryUserById(user.getId());
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    public Users queryUserById(String userId){
+        return usersMapper.selectByPrimaryKey(userId);
     }
 }
