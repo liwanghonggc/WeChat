@@ -104,9 +104,27 @@ public class UserController {
         user.setFaceImage(thumpImgUrl);
         user.setFaceImageBig(imageUrl);
 
-        user = userService.updateUserInfo(user);
+        Users result = userService.updateUserInfo(user);
 
         //返回前端,前端进行刷新
-        return WeChatResult.ok(user);
+        return WeChatResult.ok(result);
+    }
+
+    /**
+     * 修改用户昵称
+     * @param userBO
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/setNickname")
+    public WeChatResult setNickname(@RequestBody UserBO userBO) throws Exception{
+        Users user = new Users();
+
+        user.setId(userBO.getUserId());
+        user.setNickname(userBO.getNickname());
+
+        Users result = userService.updateUserInfo(user);
+
+        return WeChatResult.ok(result);
     }
 }
