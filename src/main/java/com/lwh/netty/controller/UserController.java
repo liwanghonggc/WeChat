@@ -93,9 +93,11 @@ public class UserController {
         System.out.println(imageUrl);
 
         //针对url切割,获取缩略图的URL
-        String thump = "_80x80";
+        String thump = "_80x80.";
         String[] arr = imageUrl.split("\\.");
         String thumpImgUrl = arr[0] + thump + arr[1];
+
+        System.out.println(thumpImgUrl);
 
         Users user = new Users();
         user.setId(userBO.getUserId());
