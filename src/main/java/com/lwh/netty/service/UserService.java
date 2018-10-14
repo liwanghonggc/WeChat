@@ -36,4 +36,19 @@ public interface UserService {
      * @param user
      */
     Users updateUserInfo(Users user);
+
+    /**
+     * 搜索朋友的前置条件
+     * @param userId
+     * @param friendName
+     * @return
+     */
+    Integer preconditionSearchFriends(String userId, String friendName);
+
+    /**
+     * 根据用户名查询用户信息
+     * @param username
+     * @return
+     */
+    Users queryUserInfoByUsername(String username);
 }

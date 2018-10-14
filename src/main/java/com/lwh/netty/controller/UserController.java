@@ -1,5 +1,6 @@
 package com.lwh.netty.controller;
 
+import com.lwh.netty.enums.SearchFriendsStatusEnum;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.bo.UserBO;
 import com.lwh.netty.pojo.vo.UserVO;
@@ -130,11 +131,25 @@ public class UserController {
 
     @PostMapping("/search")
     public WeChatResult searchUser(String userId, String friendUsername){
-        //判断是否为空
+        //1.判断是否为空
         if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendUsername)){
             return WeChatResult.errorMsg("字段为空");
         }
 
-        return WeChatResult.ok();
+        //2.前置条件
+        //2.1 搜索的用户如果不存在,返回无此用户
+        //2.2 搜索账号是你自己，返回[不能添加自己]
+        //2.3 搜索的朋友已经是你的好友，返回[该用户已经是你的好友]
+        Integer status = userService.preconditionSearchFriends(userId, friendUsername);
+        if(SearchFriendsStatusEnum.SUCCESS.status.equals(status)){
+            Users user = userService.queryUserInfoByUsername(friendUsername);
+            UserVO result = new UserVO();
+            BeanUtils.copyProperties(user, result);
+            return WeChatResult.ok(result);
+        }else {
+            String errorMsg = SearchFriendsStatusEnum.getMsgByKey(status);
+            return WeChatResult.errorMsg(errorMsg);
+        }
+
     }
 }

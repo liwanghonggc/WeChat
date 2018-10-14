@@ -5,7 +5,10 @@ package com.lwh.netty.enums;
  * @Description: 添加好友前置状态 枚举
  */
 public enum SearchFriendsStatusEnum {
-	
+
+	/**
+	 * 成功,无此用户,不能添加自己,该用户已是你的好友
+	 */
 	SUCCESS(0, "OK"),
 	USER_NOT_EXIST(1, "无此用户..."),	
 	NOT_YOURSELF(2, "不能添加你自己..."),			
@@ -25,7 +28,7 @@ public enum SearchFriendsStatusEnum {
 	
 	public static String getMsgByKey(Integer status) {
 		for (SearchFriendsStatusEnum type : SearchFriendsStatusEnum.values()) {
-			if (type.getStatus() == status) {
+			if (type.getStatus().equals(status)) {
 				return type.msg;
 			}
 		}

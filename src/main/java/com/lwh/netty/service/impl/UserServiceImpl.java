@@ -1,6 +1,9 @@
 package com.lwh.netty.service.impl;
 
+import com.lwh.netty.enums.SearchFriendsStatusEnum;
+import com.lwh.netty.mapper.MyFriendsMapper;
 import com.lwh.netty.mapper.UsersMapper;
+import com.lwh.netty.pojo.MyFriends;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FastDFSClient fastDFSClient;
+
+    @Autowired
+    private MyFriendsMapper myFriendsMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
@@ -98,8 +104,54 @@ public class UserServiceImpl implements UserService {
         return queryUserById(user.getId());
     }
 
+
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public Users queryUserById(String userId){
         return usersMapper.selectByPrimaryKey(userId);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Override
+    public Integer preconditionSearchFriends(String userId, String friendName) {
+        //1.搜索的用户不存在
+        Users user = queryUserInfoByUsername(friendName);
+        if(user == null){
+            return SearchFriendsStatusEnum.USER_NOT_EXIST.status;
+        }
+
+        //2.搜索账号是你自己，返回[不能添加自己]
+        if(user.getId().equals(userId)){
+            return SearchFriendsStatusEnum.NOT_YOURSELF.status;
+        }
+
+        //3.搜索的朋友已经是你的好友，返回[该用户已经是你的好友]
+        Example example = new Example(MyFriends.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("myUserId", userId);
+        criteria.andEqualTo("myFriendUserId", user.getId());
+
+        MyFriends myFriendsRel = myFriendsMapper.selectOneByExample(criteria);
+        if(myFriendsRel != null){
+            return SearchFriendsStatusEnum.ALREADY_FRIENDS.status;
+        }
+
+        return SearchFriendsStatusEnum.SUCCESS.status;
+    }
+
+    /**
+     * 根据用户名查询用户信息
+     * @param username
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Override
+    public Users queryUserInfoByUsername(String username){
+        Example userExample = new Example(Users.class);
+
+        Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("username", username);
+
+        return usersMapper.selectOneByExample(userExample);
+    }
+
 }
