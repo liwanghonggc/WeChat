@@ -127,4 +127,14 @@ public class UserController {
 
         return WeChatResult.ok(result);
     }
+
+    @PostMapping("/search")
+    public WeChatResult searchUser(String userId, String friendUsername){
+        //判断是否为空
+        if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendUsername)){
+            return WeChatResult.errorMsg("字段为空");
+        }
+
+        return WeChatResult.ok();
+    }
 }
