@@ -18,8 +18,8 @@ public interface UserService {
 
     /**
      * 查询用户是否存在
-     * @param userName
-     * @param password
+     * @param userName 用户名
+     * @param password 密码,要MD5加密
      * @return
      */
     Users queryUserForLogin(String userName, String password);
