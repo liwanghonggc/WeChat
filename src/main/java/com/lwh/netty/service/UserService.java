@@ -39,8 +39,8 @@ public interface UserService {
 
     /**
      * 搜索朋友的前置条件
-     * @param userId
-     * @param friendName
+     * @param userId 用户ID
+     * @param friendName 要添加的好友用户名
      * @return
      */
     Integer preconditionSearchFriends(String userId, String friendName);
