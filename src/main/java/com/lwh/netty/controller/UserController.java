@@ -129,6 +129,12 @@ public class UserController {
         return WeChatResult.ok(result);
     }
 
+    /**
+     * 搜索添加好友
+     * @param userId
+     * @param friendUsername
+     * @return
+     */
     @PostMapping("/search")
     public WeChatResult searchUser(String userId, String friendUsername){
         //1.判断是否为空
