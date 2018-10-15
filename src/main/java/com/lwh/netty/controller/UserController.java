@@ -131,8 +131,8 @@ public class UserController {
 
     /**
      * 搜索添加好友
-     * @param userId
-     * @param friendUsername
+     * @param userId 用户ID
+     * @param friendUsername 要添加的好友用户名
      * @return
      */
     @PostMapping("/search")
