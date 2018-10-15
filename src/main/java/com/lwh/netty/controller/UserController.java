@@ -137,6 +137,7 @@ public class UserController {
      */
     @PostMapping("/search")
     public WeChatResult searchUser(String userId, String friendUsername){
+        System.out.println(userId + ", " + friendUsername);
         //1.判断是否为空
         if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendUsername)){
             return WeChatResult.errorMsg("字段为空");
