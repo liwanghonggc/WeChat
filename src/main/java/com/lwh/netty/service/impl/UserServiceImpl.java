@@ -4,9 +4,11 @@ import com.lwh.netty.enums.SearchFriendsStatusEnum;
 import com.lwh.netty.mapper.FriendsRequestMapper;
 import com.lwh.netty.mapper.MyFriendsMapper;
 import com.lwh.netty.mapper.UsersMapper;
+import com.lwh.netty.mapper.UsersMapperCustom;
 import com.lwh.netty.pojo.FriendsRequest;
 import com.lwh.netty.pojo.MyFriends;
 import com.lwh.netty.pojo.Users;
+import com.lwh.netty.pojo.vo.FriendRequestVO;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
 import com.lwh.netty.utils.FileUtils;
@@ -22,6 +24,7 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lwh
@@ -49,6 +52,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FriendsRequestMapper friendsRequestMapper;
+
+    @Autowired
+    private UsersMapperCustom usersMapperCustom;
 
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
@@ -160,7 +166,7 @@ public class UserServiceImpl implements UserService {
         return usersMapper.selectOneByExample(userExample);
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public void sendFriendRequest(String myUserId, String friendUsername) {
         //查询朋友的信息
@@ -183,6 +189,12 @@ public class UserServiceImpl implements UserService {
             request.setRequestDateTime(new Date());
             friendsRequestMapper.insert(request);
         }
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Override
+    public List<FriendRequestVO> queryFriendRequestList(String acceptUserId) {
+        return usersMapperCustom.queryFriendRequestList(acceptUserId);
     }
 
 }

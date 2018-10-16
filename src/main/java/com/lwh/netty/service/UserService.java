@@ -1,6 +1,9 @@
 package com.lwh.netty.service;
 
 import com.lwh.netty.pojo.Users;
+import com.lwh.netty.pojo.vo.FriendRequestVO;
+
+import java.util.List;
 
 /**
  * @author lwh
@@ -58,4 +61,11 @@ public interface UserService {
      * @param friendUsername
      */
     void sendFriendRequest(String myUserId, String friendUsername);
+
+    /**
+     * 搜索添加好友的信息
+     * @param acceptUserId
+     * @return
+     */
+    List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
 }

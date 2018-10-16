@@ -3,6 +3,7 @@ package com.lwh.netty.controller;
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.bo.UserBO;
+import com.lwh.netty.pojo.vo.FriendRequestVO;
 import com.lwh.netty.pojo.vo.UserVO;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
@@ -14,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author lwh
@@ -188,5 +191,22 @@ public class UserController {
             return WeChatResult.errorMsg(errorMsg);
         }
         return WeChatResult.ok();
+    }
+
+    /**
+     * 查询用户接收到的好友申请
+     * @return
+     */
+    @PostMapping("/queryFriendRequest")
+    public WeChatResult queryFriendRequestList(@RequestBody UserBO userBO){
+        String userId = userBO.getUserId();
+        System.out.println(userId);
+
+        if(StringUtils.isBlank(userId)){
+            return WeChatResult.errorMsg("userId为空");
+        }
+
+        List<FriendRequestVO> friendRequestVOList = userService.queryFriendRequestList(userId);
+        return WeChatResult.ok(friendRequestVOList);
     }
 }
