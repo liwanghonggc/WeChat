@@ -9,6 +9,16 @@ public class UserBO {
 
     private String nickname;
 
+    private String friendUsername;
+
+    public String getFriendUsername() {
+        return friendUsername;
+    }
+
+    public void setFriendUsername(String friendUsername) {
+        this.friendUsername = friendUsername;
+    }
+
     public String getUserId() {
         return userId;
     }

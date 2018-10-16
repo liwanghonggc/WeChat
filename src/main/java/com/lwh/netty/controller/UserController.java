@@ -131,13 +131,14 @@ public class UserController {
 
     /**
      * 搜索添加好友
-     * @param userId 用户ID
-     * @param friendUsername 要添加的好友用户名
      * @return
      */
     @PostMapping("/search")
-    public WeChatResult searchUser(String userId, String friendUsername){
+    public WeChatResult searchUser(@RequestBody UserBO userBO){
+        String userId = userBO.getUserId();
+        String friendUsername = userBO.getFriendUsername();
         System.out.println(userId + ", " + friendUsername);
+
         //1.判断是否为空
         if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendUsername)){
             return WeChatResult.errorMsg("字段为空");
