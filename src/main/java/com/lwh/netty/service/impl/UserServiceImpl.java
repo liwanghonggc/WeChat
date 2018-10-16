@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("myUserId", userId);
         criteria.andEqualTo("myFriendUserId", user.getId());
 
-        MyFriends myFriendsRel = myFriendsMapper.selectOneByExample(criteria);
+        MyFriends myFriendsRel = myFriendsMapper.selectOneByExample(example);
         if(myFriendsRel != null){
             return SearchFriendsStatusEnum.ALREADY_FRIENDS.status;
         }

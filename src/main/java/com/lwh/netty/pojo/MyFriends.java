@@ -16,7 +16,7 @@ public class MyFriends {
     /**
      * 用户的好友id
      */
-    @Column(name = "my_friend_user_id")
+    @Column(name = "my_friend_id")
     private String myFriendUserId;
 
     /**
