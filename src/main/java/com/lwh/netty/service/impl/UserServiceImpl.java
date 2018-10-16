@@ -1,8 +1,10 @@
 package com.lwh.netty.service.impl;
 
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
+import com.lwh.netty.mapper.FriendsRequestMapper;
 import com.lwh.netty.mapper.MyFriendsMapper;
 import com.lwh.netty.mapper.UsersMapper;
+import com.lwh.netty.pojo.FriendsRequest;
 import com.lwh.netty.pojo.MyFriends;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.service.UserService;
@@ -19,6 +21,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author lwh
@@ -43,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MyFriendsMapper myFriendsMapper;
+
+    @Autowired
+    private FriendsRequestMapper friendsRequestMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
@@ -152,6 +158,31 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("username", username);
 
         return usersMapper.selectOneByExample(userExample);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Override
+    public void sendFriendRequest(String myUserId, String friendUsername) {
+        //查询朋友的信息
+        Users friend = queryUserInfoByUsername(friendUsername);
+
+        //查询发送好友请求记录
+        Example fre = new Example(FriendsRequest.class);
+        Criteria frc = fre.createCriteria();
+        frc.andEqualTo("sendUserId", myUserId);
+        frc.andEqualTo("acceptUserId", friend.getId());
+
+        FriendsRequest friendsRequest = friendsRequestMapper.selectOneByExample(fre);
+        if(friendsRequest == null){
+            //如果不是你的好友,并且好友记录没有添加,则新增好友请求记录
+            String requestId = sid.nextShort();
+            FriendsRequest request = new FriendsRequest();
+            request.setId(requestId);
+            request.setSendUserId(myUserId);
+            request.setAcceptUserId(friend.getId());
+            request.setRequestDateTime(new Date());
+            friendsRequestMapper.insert(request);
+        }
     }
 
 }

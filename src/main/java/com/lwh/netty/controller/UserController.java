@@ -160,4 +160,33 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 发送添加好友的请求
+     * @return
+     */
+    @PostMapping("/addFriendRequest")
+    public WeChatResult addFriendRequest(@RequestBody UserBO userBO){
+        String userId = userBO.getUserId();
+        String friendUsername = userBO.getFriendUsername();
+        System.out.println(userId + ", " + friendUsername);
+
+        //1.判断是否为空
+        if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendUsername)){
+            return WeChatResult.errorMsg("字段为空");
+        }
+
+        //2.前置条件
+        //2.1 搜索的用户如果不存在,返回无此用户
+        //2.2 搜索账号是你自己，返回[不能添加自己]
+        //2.3 搜索的朋友已经是你的好友，返回[该用户已经是你的好友]
+        Integer status = userService.preconditionSearchFriends(userId, friendUsername);
+        if(SearchFriendsStatusEnum.SUCCESS.status.equals(status)){
+            userService.sendFriendRequest(userId, friendUsername);
+        }else {
+            String errorMsg = SearchFriendsStatusEnum.getMsgByKey(status);
+            return WeChatResult.errorMsg(errorMsg);
+        }
+        return WeChatResult.ok();
+    }
 }

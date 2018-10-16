@@ -51,4 +51,11 @@ public interface UserService {
      * @return
      */
     Users queryUserInfoByUsername(String username);
+
+    /**
+     * 发送好友添加请求,保存该记录到数据库
+     * @param myUserId
+     * @param friendUsername
+     */
+    void sendFriendRequest(String myUserId, String friendUsername);
 }
