@@ -1,6 +1,5 @@
 package com.lwh.netty;
 
-import com.lwh.netty.pojo.Users;
 import com.lwh.netty.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +16,9 @@ public class NettyApplicationTests {
 
     @Test
     public void contextLoads() {
-        Users user = userService.queryUserInfoByUsername("xcj");
-        System.out.println(user.getUsername());
+        String userId = "181014FM6KGR4000";
+        String username = "xcj";
+        Integer res = userService.preconditionSearchFriends(userId, username);
     }
 
 }
