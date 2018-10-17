@@ -26,7 +26,7 @@ public enum OperatorFriendRequestTypeEnum {
 	
 	public static String getMsgByType(Integer type) {
 		for (OperatorFriendRequestTypeEnum operType : OperatorFriendRequestTypeEnum.values()) {
-			if (operType.getType() == type) {
+			if (operType.getType().equals(type)) {
 				return operType.msg;
 			}
 		}

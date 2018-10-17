@@ -11,6 +11,10 @@ public class OperFriendReqBO {
 
     private String sendUserId;
 
+    /**
+     * operType为0,忽略好友请求
+     * operType为1,接收好友请求
+     */
     private Integer operType;
 
     public String getAcceptUserId() {

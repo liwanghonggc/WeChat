@@ -1,7 +1,9 @@
 package com.lwh.netty.controller;
 
+import com.lwh.netty.enums.OperatorFriendRequestTypeEnum;
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
 import com.lwh.netty.pojo.Users;
+import com.lwh.netty.pojo.bo.OperFriendReqBO;
 import com.lwh.netty.pojo.bo.UserBO;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
 import com.lwh.netty.pojo.vo.UserVO;
@@ -208,5 +210,28 @@ public class UserController {
 
         List<FriendRequestVO> friendRequestVOList = userService.queryFriendRequestList(userId);
         return WeChatResult.ok(friendRequestVOList);
+    }
+
+    /**
+     * operType为0,忽略好友请求
+     * operType为1,接收好友请求
+     * @param operFriendReqBO
+     * @return
+     */
+    @PostMapping("/operatorFriendRequest")
+    public WeChatResult operatorFriendRequest(@RequestBody OperFriendReqBO operFriendReqBO){
+        String acceptUserId = operFriendReqBO.getAcceptUserId();
+        String sendUserId = operFriendReqBO.getSendUserId();
+        Integer operType = operFriendReqBO.getOperType();
+
+        if(StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(sendUserId) || operType == null){
+            return WeChatResult.errorMsg("参数为空");
+        }
+
+        String msgByType = OperatorFriendRequestTypeEnum.getMsgByType(operType);
+        if(StringUtils.isBlank(msgByType)){
+            return WeChatResult.errorMsg("类型不正确");
+        }
+        return WeChatResult.ok();
     }
 }
