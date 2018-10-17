@@ -224,6 +224,8 @@ public class UserController {
         String sendUserId = operFriendReqBO.getSendUserId();
         Integer operType = operFriendReqBO.getOperType();
 
+        System.out.println(acceptUserId + ", " + sendUserId + ", " + operType);
+
         if(StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(sendUserId) || operType == null){
             return WeChatResult.errorMsg("参数为空");
         }
@@ -232,6 +234,15 @@ public class UserController {
         if(StringUtils.isBlank(msgByType)){
             return WeChatResult.errorMsg("类型不正确");
         }
+
+        if(OperatorFriendRequestTypeEnum.IGNORE.type.equals(operType)){
+            //忽略好友请求
+            userService.deleteFriendRequest(sendUserId, acceptUserId);
+        }else if(OperatorFriendRequestTypeEnum.PASS.type.equals(operType)){
+            //接收好友请求
+            userService.passFriendRequest(sendUserId, acceptUserId);
+        }
+
         return WeChatResult.ok();
     }
 }

@@ -197,4 +197,45 @@ public class UserServiceImpl implements UserService {
         return usersMapperCustom.queryFriendRequestList(acceptUserId);
     }
 
+    /**
+     * 删除好友请求记录
+     * @param sendUseId
+     * @param acceptUserId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void deleteFriendRequest(String sendUseId, String acceptUserId) {
+        Example fre = new Example(FriendsRequest.class);
+        Criteria frc = fre.createCriteria();
+        frc.andEqualTo("sendUserId", sendUseId);
+        frc.andEqualTo("acceptUserId", acceptUserId);
+        friendsRequestMapper.deleteByExample(fre);
+    }
+
+    /**
+     * 通过好友请求
+     * @param sendUseId
+     * @param acceptUserId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void passFriendRequest(String sendUseId, String acceptUserId) {
+        //1.保存好友记录
+        saveFriends(sendUseId, acceptUserId);
+        //2.逆向保存好友记录
+        saveFriends(acceptUserId, sendUseId);
+        //3.删除好友请求记录
+        deleteFriendRequest(sendUseId, acceptUserId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    void saveFriends(String sendUserId, String acceptUserId){
+        MyFriends myFriends = new MyFriends();
+        String recordId = sid.nextShort();
+        myFriends.setId(recordId);
+        myFriends.setMyFriendUserId(acceptUserId);
+        myFriends.setMyUserId(sendUserId);
+        myFriendsMapper.insert(myFriends);
+    }
+
 }
