@@ -1,6 +1,8 @@
 package com.lwh.netty.pojo.vo;
 
-
+/**
+ * VO类是给前台传递数据的
+ */
 public class UserVO {
 
     private String id;

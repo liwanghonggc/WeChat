@@ -1,6 +1,8 @@
 package com.lwh.netty.pojo.bo;
 
-
+/**
+ * 接收前台传递的数据
+ */
 public class UserBO {
 
     private String userId;
