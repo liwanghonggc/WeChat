@@ -18,4 +18,13 @@
           fr.accept_user_id = #{acceptUserId}
     </select>
 
+    <select id="queryMyFriends" resultType="com.lwh.netty.pojo.vo.MyFriendsVO" parameterType="String">
+        select
+          *
+        from
+          users u
+        left join
+          my_friends
+    </select>
+
 </mapper>

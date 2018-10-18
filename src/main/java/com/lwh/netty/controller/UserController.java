@@ -245,4 +245,14 @@ public class UserController {
 
         return WeChatResult.ok();
     }
+
+    /**
+     * 显示好友通讯录
+     * @param userId
+     * @return
+     */
+    @PostMapping("/myFriends")
+    public WeChatResult myFriends(String userId){
+        return WeChatResult.ok();
+    }
 }

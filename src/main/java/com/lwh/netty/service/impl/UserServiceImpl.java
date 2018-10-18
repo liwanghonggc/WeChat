@@ -9,6 +9,7 @@ import com.lwh.netty.pojo.FriendsRequest;
 import com.lwh.netty.pojo.MyFriends;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
+import com.lwh.netty.pojo.vo.MyFriendsVO;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
 import com.lwh.netty.utils.FileUtils;
@@ -228,6 +229,7 @@ public class UserServiceImpl implements UserService {
         deleteFriendRequest(sendUseId, acceptUserId);
     }
 
+
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     void saveFriends(String sendUserId, String acceptUserId){
         MyFriends myFriends = new MyFriends();
@@ -236,6 +238,16 @@ public class UserServiceImpl implements UserService {
         myFriends.setMyFriendUserId(acceptUserId);
         myFriends.setMyUserId(sendUserId);
         myFriendsMapper.insert(myFriends);
+    }
+
+    /**
+     * 搜索显示好友通讯录
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<MyFriendsVO> queryMyFriends(String userId) {
+        return null;
     }
 
 }

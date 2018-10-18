@@ -3,6 +3,7 @@ package com.lwh.netty.mapper;
 
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
+import com.lwh.netty.pojo.vo.MyFriendsVO;
 import com.lwh.netty.utils.MyMapper;
 
 import java.util.List;
@@ -18,4 +19,11 @@ public interface UsersMapperCustom extends MyMapper<Users> {
      * @return
      */
     List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
+
+    /**
+     * 查询好友列表通讯录
+     * @param userId
+     * @return
+     */
+    List<MyFriendsVO> queryMyFriends(String userId);
 }

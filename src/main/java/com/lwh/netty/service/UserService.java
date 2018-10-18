@@ -2,6 +2,7 @@ package com.lwh.netty.service;
 
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
+import com.lwh.netty.pojo.vo.MyFriendsVO;
 
 import java.util.List;
 
@@ -82,4 +83,11 @@ public interface UserService {
      * @param acceptUserId
      */
     void passFriendRequest(String sendUseId, String acceptUserId);
+
+    /**
+     * 查询好友列表
+     * @param userId
+     * @return
+     */
+    List<MyFriendsVO> queryMyFriends(String userId);
 }
