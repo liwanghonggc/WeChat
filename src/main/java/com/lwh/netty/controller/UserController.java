@@ -244,7 +244,8 @@ public class UserController {
             userService.passFriendRequest(sendUserId, acceptUserId);
         }
 
-        return WeChatResult.ok();
+        List<MyFriendsVO> myFriendsVOList = userService.queryMyFriends(acceptUserId);
+        return WeChatResult.ok(myFriendsVOList);
     }
 
     /**
