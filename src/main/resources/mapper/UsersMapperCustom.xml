@@ -20,11 +20,18 @@
 
     <select id="queryMyFriends" resultType="com.lwh.netty.pojo.vo.MyFriendsVO" parameterType="String">
         select
-          *
+          u.id as friendUserId,
+          u.username as friendUsername,
+          u.face_image as friendFaceImage,
+          u.nickname as friendNickname
         from
-          users u
+          my_friends fr
         left join
-          my_friends
+          users u
+        on
+          fr.my_friend_id = u.id
+        where
+          fr.my_user_id = #{userId}
     </select>
 
 </mapper>

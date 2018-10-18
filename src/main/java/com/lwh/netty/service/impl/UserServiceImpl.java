@@ -245,9 +245,11 @@ public class UserServiceImpl implements UserService {
      * @param userId
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
     public List<MyFriendsVO> queryMyFriends(String userId) {
-        return null;
+        List<MyFriendsVO> myFriendsVOList = usersMapperCustom.queryMyFriends(userId);
+        return myFriendsVOList;
     }
 
 }

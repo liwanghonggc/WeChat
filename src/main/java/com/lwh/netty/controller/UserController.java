@@ -6,6 +6,7 @@ import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.bo.OperFriendReqBO;
 import com.lwh.netty.pojo.bo.UserBO;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
+import com.lwh.netty.pojo.vo.MyFriendsVO;
 import com.lwh.netty.pojo.vo.UserVO;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
@@ -248,11 +249,17 @@ public class UserController {
 
     /**
      * 显示好友通讯录
-     * @param userId
      * @return
      */
     @PostMapping("/myFriends")
-    public WeChatResult myFriends(String userId){
-        return WeChatResult.ok();
+    public WeChatResult myFriends(@RequestBody UserBO userBO){
+        String userId = userBO.getUserId();
+
+        if(StringUtils.isBlank(userId)){
+            return WeChatResult.errorMsg("userId为空");
+        }
+
+        List<MyFriendsVO> myFriendsVOList = userService.queryMyFriends(userId);
+        return WeChatResult.ok(myFriendsVOList);
     }
 }
