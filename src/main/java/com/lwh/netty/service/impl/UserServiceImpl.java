@@ -295,4 +295,17 @@ public class UserServiceImpl implements UserService {
         usersMapperCustom.updateMsgSigned(msgIdList);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
+    @Override
+    public List<com.lwh.netty.pojo.ChatMsg> getUnReadMsgList(String acceptUserId) {
+        Example fre = new Example(com.lwh.netty.pojo.ChatMsg.class);
+        Criteria frc = fre.createCriteria();
+        frc.andEqualTo("signFlag", MsgSignFlagEnum.unsign.type);
+        frc.andEqualTo("acceptUserId", acceptUserId);
+
+        List<com.lwh.netty.pojo.ChatMsg> result = chatMsgMapper.selectByExample(fre);
+
+        return result;
+    }
+
 }

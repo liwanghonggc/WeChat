@@ -2,6 +2,7 @@ package com.lwh.netty.controller;
 
 import com.lwh.netty.enums.OperatorFriendRequestTypeEnum;
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
+import com.lwh.netty.pojo.ChatMsg;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.bo.OperFriendReqBO;
 import com.lwh.netty.pojo.bo.UserBO;
@@ -262,5 +263,21 @@ public class UserController {
 
         List<MyFriendsVO> myFriendsVOList = userService.queryMyFriends(userId);
         return WeChatResult.ok(myFriendsVOList);
+    }
+
+    /**
+     * 用户手机端获取未签收的消息列表
+     * @param userBO
+     * @return
+     */
+    @PostMapping("/getUnReadMsgList")
+    public WeChatResult getUnReadMsgList(@RequestBody UserBO userBO){
+        String acceptUserId = userBO.getAcceptUserId();
+        if(StringUtils.isBlank(acceptUserId)){
+            return WeChatResult.errorMsg("ID为空!");
+        }
+
+        List<ChatMsg> unReadMsgList = userService.getUnReadMsgList(acceptUserId);
+        return WeChatResult.ok(unReadMsgList);
     }
 }

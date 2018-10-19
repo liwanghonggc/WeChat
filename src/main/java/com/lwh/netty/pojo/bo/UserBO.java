@@ -13,6 +13,8 @@ public class UserBO {
 
     private String friendUsername;
 
+    private String acceptUserId;
+
     public String getFriendUsername() {
         return friendUsername;
     }
@@ -43,5 +45,13 @@ public class UserBO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getAcceptUserId() {
+        return acceptUserId;
+    }
+
+    public void setAcceptUserId(String acceptUserId) {
+        this.acceptUserId = acceptUserId;
     }
 }

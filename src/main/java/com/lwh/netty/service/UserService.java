@@ -104,4 +104,11 @@ public interface UserService {
      * @param msgIdList
      */
     void updateMsgSigned(List<String> msgIdList);
+
+    /**
+     * 获取未签收消息列表
+     * @param acceptUserId
+     * @return
+     */
+    List<com.lwh.netty.pojo.ChatMsg> getUnReadMsgList(String acceptUserId);
 }
