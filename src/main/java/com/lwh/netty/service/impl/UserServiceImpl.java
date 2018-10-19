@@ -1,5 +1,6 @@
 package com.lwh.netty.service.impl;
 
+import com.lwh.netty.enums.MsgActionEnum;
 import com.lwh.netty.enums.MsgSignFlagEnum;
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
 import com.lwh.netty.mapper.*;
@@ -11,8 +12,13 @@ import com.lwh.netty.pojo.vo.MyFriendsVO;
 import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
 import com.lwh.netty.utils.FileUtils;
+import com.lwh.netty.utils.JsonUtils;
 import com.lwh.netty.utils.QRCodeUtils;
+import com.lwh.netty.websocket.UserChannelRel;
 import com.lwh.netty.websocket.pojo.ChatMsg;
+import com.lwh.netty.websocket.pojo.DataContent;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -229,6 +235,14 @@ public class UserServiceImpl implements UserService {
         saveFriends(acceptUserId, sendUseId);
         //3.删除好友请求记录
         deleteFriendRequest(sendUseId, acceptUserId);
+
+        Channel sendChannel = UserChannelRel.get(sendUseId);
+        if(sendChannel != null){
+            //使用WebSocket主动推送消息到请求发起者,更新他的通讯录列表为最新
+            DataContent dataContent = new DataContent();
+            dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+            sendChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContent)));
+        }
     }
 
 

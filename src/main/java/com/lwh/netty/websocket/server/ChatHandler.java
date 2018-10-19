@@ -61,11 +61,16 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             String receiveId = chatMsg.getReceiveId();
             String senderId = chatMsg.getSenderId();
 
+            System.out.println("消息为: " + msgText + ", 接收站ID: " + receiveId + ", 发送者ID: " + senderId);
+
             //保存消息到数据库,标记为未签收
             UserService userService = SpringUtil.getBean("userServiceImpl", UserService.class);
             String msgId = userService.saveMsg(chatMsg);
 
             chatMsg.setMsgId(msgId);
+
+            DataContent dataContentMsg = new DataContent();
+            dataContentMsg.setChatMsg(chatMsg);
 
             //发送消息
             //从全局用户channel关系中获取接收方的channel
@@ -77,7 +82,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                 Channel findChannel = users.find(receiveChannel.id());
                 if(findChannel != null){
                     //用户在线
-                    receiveChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(chatMsg)));
+                    receiveChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContentMsg)));
                 }else{
                     //用户离线
                     //TODO
