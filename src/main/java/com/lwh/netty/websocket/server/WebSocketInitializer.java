@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author lwh
@@ -31,11 +32,16 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
 
         //以上三个是用于支持HTTP协议
 
+        //针对客户端,如果在1分钟没有向服务端发送心跳,则主动断开,如果是读空闲或者写空闲不做处理
+        pipeline.addLast(new IdleStateHandler(8, 10, 12));
+        //增加自定义心跳处理机制
+        pipeline.addLast(new HeartBeatHandler());
+
+
         //用于WebSocket服务器处理的协议,用于指定客户端连接访问的路由
         //此handler会帮你处理一些繁重复杂的事,会帮你处理握手动作,handshaking
         //对于WebSocket来说,都是以frames来进行传输的,不同的数据类型对应的frame也不同
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-
 
         //添加用户自定义的handler
         pipeline.addLast(new ChatHandler());
