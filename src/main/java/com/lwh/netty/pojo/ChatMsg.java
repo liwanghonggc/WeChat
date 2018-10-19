@@ -21,7 +21,7 @@ public class ChatMsg {
      * 1：签收
      * 0：未签收
      */
-    @Column(name = "sign_flag")
+    @Column(name = "send_flag")
     private Integer signFlag;
 
     /**
