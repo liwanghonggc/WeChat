@@ -1,6 +1,6 @@
 package com.lwh.netty;
 
-import com.lwh.netty.websocket.WebSocketServer;
+import com.lwh.netty.websocket.server.WebSocketServer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;

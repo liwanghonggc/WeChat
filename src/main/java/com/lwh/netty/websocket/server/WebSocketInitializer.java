@@ -1,4 +1,4 @@
-package com.lwh.netty.websocket;
+package com.lwh.netty.websocket.server;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

@@ -3,6 +3,7 @@ package com.lwh.netty.service;
 import com.lwh.netty.pojo.Users;
 import com.lwh.netty.pojo.vo.FriendRequestVO;
 import com.lwh.netty.pojo.vo.MyFriendsVO;
+import com.lwh.netty.websocket.pojo.ChatMsg;
 
 import java.util.List;
 
@@ -90,4 +91,11 @@ public interface UserService {
      * @return
      */
     List<MyFriendsVO> queryMyFriends(String userId);
+
+    /**
+     * 保存聊天信息,返回值为消息ID,根据它做签收
+     * @param chatMsg
+     * @return
+     */
+    String saveMsg(ChatMsg chatMsg);
 }

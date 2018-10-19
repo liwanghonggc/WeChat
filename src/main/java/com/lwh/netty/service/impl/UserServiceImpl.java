@@ -1,10 +1,8 @@
 package com.lwh.netty.service.impl;
 
+import com.lwh.netty.enums.MsgSignFlagEnum;
 import com.lwh.netty.enums.SearchFriendsStatusEnum;
-import com.lwh.netty.mapper.FriendsRequestMapper;
-import com.lwh.netty.mapper.MyFriendsMapper;
-import com.lwh.netty.mapper.UsersMapper;
-import com.lwh.netty.mapper.UsersMapperCustom;
+import com.lwh.netty.mapper.*;
 import com.lwh.netty.pojo.FriendsRequest;
 import com.lwh.netty.pojo.MyFriends;
 import com.lwh.netty.pojo.Users;
@@ -14,6 +12,7 @@ import com.lwh.netty.service.UserService;
 import com.lwh.netty.utils.FastDFSClient;
 import com.lwh.netty.utils.FileUtils;
 import com.lwh.netty.utils.QRCodeUtils;
+import com.lwh.netty.websocket.pojo.ChatMsg;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersMapperCustom usersMapperCustom;
+
+    @Autowired
+    private ChatMsgMapper chatMsgMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     @Override
@@ -250,6 +252,23 @@ public class UserServiceImpl implements UserService {
     public List<MyFriendsVO> queryMyFriends(String userId) {
         List<MyFriendsVO> myFriendsVOList = usersMapperCustom.queryMyFriends(userId);
         return myFriendsVOList;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public String saveMsg(ChatMsg chatMsg) {
+        com.lwh.netty.pojo.ChatMsg msgDB = new com.lwh.netty.pojo.ChatMsg();
+
+        String msgId = sid.nextShort();
+        msgDB.setId(msgId);
+        msgDB.setAcceptUserId(chatMsg.getReceiveId());
+        msgDB.setSendUserId(chatMsg.getSenderId());
+        msgDB.setCreateTime(new Date());
+        msgDB.setSignFlag(MsgSignFlagEnum.unsign.type);
+        msgDB.setMsg(chatMsg.getMsg());
+
+        chatMsgMapper.insert(msgDB);
+        return msgId;
     }
 
 }
