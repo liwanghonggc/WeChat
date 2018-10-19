@@ -26,4 +26,10 @@ public interface UsersMapperCustom extends MyMapper<Users> {
      * @return
      */
     List<MyFriendsVO> queryMyFriends(String userId);
+
+    /**
+     * 批量签收消息
+     * @param msgIdList
+     */
+    void updateMsgSigned(List<String> msgIdList);
 }

@@ -14,8 +14,11 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lwh
@@ -62,11 +65,40 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             Channel receiveChannel = UserChannelRel.get(receiveId);
             if(receiveChannel == null){
                 //TODO,channel为空代表用户离线,推送消息(JPush,个推,小米推送)
+            }else{
+                //当receiveChannel不为空时,从ChannelGroup中查找对应的channel是否存在
+                Channel findChannel = users.find(receiveChannel.id());
+                if(findChannel != null){
+                    //用户在线
+                    receiveChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(chatMsg)));
+                }else{
+                    //用户离线
+                    //TODO
+                }
             }
 
         }else if(MsgActionEnum.SIGNED.type.equals(action)){
-            //2.3 签收消息类型,针对具体的消息进行签收,修改数据库中对应的消息的签收状态(已签收)
+            //2.3 签收消息类型,针对具体的消息进行签收,修改数据库中对应的消息的签收状态(已签收),手机接收到了就代表签收
+            UserService userService = SpringUtil.getBean("userServiceImpl", UserService.class);
 
+            //扩展字段在signed类型的消息中,代表需要去签收的消息id,逗号间隔
+            String msgIdsStr = dataContent.getExtend();
+            if(msgIdsStr != null){
+                String[] msgIds = msgIdsStr.split(",");
+                List<String> msgIdList = new ArrayList<>();
+                for(String mid : msgIds){
+                    if(StringUtils.isNotBlank(mid)){
+                        msgIdList.add(mid);
+                    }
+                }
+
+                System.out.println(msgIdList.toString());
+
+                if(msgIdList.size() > 0){
+                    //批量签收
+                    userService.updateMsgSigned(msgIdList);
+                }
+            }
         }else if(MsgActionEnum.KEEPALIVE.type.equals(action)){
             //2.4 心跳类型的消息
 

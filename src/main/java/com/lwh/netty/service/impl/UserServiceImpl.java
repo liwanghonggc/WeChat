@@ -271,4 +271,14 @@ public class UserServiceImpl implements UserService {
         return msgId;
     }
 
+    /**
+     * 批量更新签收状态
+     * @param msgIdList
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void updateMsgSigned(List<String> msgIdList) {
+        usersMapperCustom.updateMsgSigned(msgIdList);
+    }
+
 }

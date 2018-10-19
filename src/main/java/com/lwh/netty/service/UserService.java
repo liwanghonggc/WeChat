@@ -98,4 +98,10 @@ public interface UserService {
      * @return
      */
     String saveMsg(ChatMsg chatMsg);
+
+    /**
+     * 批量签收消息
+     * @param msgIdList
+     */
+    void updateMsgSigned(List<String> msgIdList);
 }
