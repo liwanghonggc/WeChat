@@ -89,6 +89,8 @@ public class UserController {
         //获取前端传过来的base64字符串,然后转换为文件对象再上传
         String faceData = userBO.getFaceData();
 
+        System.out.println(faceData);
+
         String userFacePath = "D:\\" + userBO.getUserId() + "userPic.png";
         FileUtils.base64ToFile(userFacePath, faceData);
 
