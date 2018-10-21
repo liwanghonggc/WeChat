@@ -8,10 +8,10 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @date 2018-10-20
  * @desp 使用War包启动需要新建该类
  */
-public class WarStartApplication extends SpringBootServletInitializer {
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(NettyApplication.class);
-    }
-}
+//public class WarStartApplication extends SpringBootServletInitializer {
+//
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(NettyApplication.class);
+//    }
+//}
