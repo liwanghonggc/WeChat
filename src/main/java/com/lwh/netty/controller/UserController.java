@@ -91,7 +91,7 @@ public class UserController {
 
         System.out.println(faceData);
 
-        String userFacePath = "D:\\" + userBO.getUserId() + "userPic.png";
+        String userFacePath = "/home/tmp/" + userBO.getUserId() + "userPic.png";
         FileUtils.base64ToFile(userFacePath, faceData);
 
         //上传文件到FastDFS

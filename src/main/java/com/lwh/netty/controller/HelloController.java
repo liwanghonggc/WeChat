@@ -18,11 +18,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(){
-        logger.info("log test");
-        logger.debug("log test");
-        logger.error("log test");
-        logger.trace("log test");
-        logger.warn("log test");
-        return "Hello WeChat";
+        String str = "hello.test";
+        String[] splits = str.split("\\.");
+        return splits[0] + splits[1];
     }
 }

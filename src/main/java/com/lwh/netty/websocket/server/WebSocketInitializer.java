@@ -33,7 +33,7 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
         //以上三个是用于支持HTTP协议
 
         //针对客户端,如果在1分钟没有向服务端发送心跳,则主动断开,如果是读空闲或者写空闲不做处理
-        pipeline.addLast(new IdleStateHandler(8, 10, 12));
+        pipeline.addLast(new IdleStateHandler(30, 40, 60));
         //增加自定义心跳处理机制
         pipeline.addLast(new HeartBeatHandler());
 

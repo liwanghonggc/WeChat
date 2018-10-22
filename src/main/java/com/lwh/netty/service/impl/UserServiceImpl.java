@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         String userId = sid.nextShort();
 
         //为每一个用户生成二维码
-        String qrCodePath = "D://user" + userId + "qrcode.png";
+        String qrCodePath = "/home/tmp/" + userId + "qrcode.png";
         //wechat_qrcode:[username]
         qrCodeUtils.createQRCode(qrCodePath, "wechat_qrcode:" + user.getUsername());
         MultipartFile qrCodeFile = FileUtils.fileToMultipart(qrCodePath);
